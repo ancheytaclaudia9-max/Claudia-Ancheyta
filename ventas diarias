@@ -1,0 +1,44 @@
+
+-- Proyecto Coppel Tapachula - Ventas Diarias vs Meta del Mes
+-- Autora: Claudia Ancheyta
+
+CREATE TABLE VentasDiarias (
+    Fecha DATE PRIMARY KEY,
+    VentaDelDia DECIMAL(10,2),
+    MetaDelMes DECIMAL(10,2)
+);
+
+-- EJEMPLO - Cambia los numeros por los reales de tu tienda
+INSERT INTO VentasDiarias VALUES ('2026-05-01', 12000, 300000);
+INSERT INTO VentasDiarias VALUES ('2026-05-02', 15500, 300000);
+INSERT INTO VentasDiarias VALUES ('2026-05-03', 9800, 300000);
+INSERT INTO VentasDiarias VALUES ('2026-05-04', 18200, 300000);
+
+-- REPORTE FINAL
+SELECT 
+    Fecha,
+    VentaDelDia,
+    SUM(VentaDelDia) OVER (ORDER BY Fecha) AS VentaAcumulada,
+    MetaDelMes,
+    CAST(SUM(VentaDelDia) OVER (ORDER BY Fecha) * 100.0 / MetaDelMes AS DECIMAL(5,2)) AS PorcentajeAvance,
+    MetaDelMes - SUM(VentaDelDia) OVER (ORDER BY Fecha) AS FaltaParaMeta
+FROM VentasDiarias
+ORDER BY Fecha;
+CREATE TABLE VentasDiarias (
+    Fecha DATE PRIMARY KEY,
+    VentaDelDia DECIMAL(10,2),
+    MetaDelMes DECIMAL(10,2)
+);
+
+-- Venta real de hoy
+INSERT INTO VentasDiarias VALUES ('2026-05-04', 10320, 300000);
+
+-- REPORTE
+SELECT 
+    Fecha,
+    VentaDelDia,
+    SUM(VentaDelDia) OVER (ORDER BY Fecha) AS VentaAcumulada,
+    MetaDelMes,
+    CAST(SUM(VentaDelDia) OVER (ORDER BY Fecha) * 100.0 / MetaDelMes AS DECIMAL(5,2)) AS PorcentajeAvance,
+    MetaDelMes - SUM(VentaDelDia) OVER (ORDER BY Fecha) AS FaltaParaMeta
+FROM VentasDiarias;
